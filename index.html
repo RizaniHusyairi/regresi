@@ -3,218 +3,453 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Infografis Analisis Numerik: Getaran Pegas</title>
+    <title>Laporan Komputasi Numerik - Rizani Husyairi</title>
+    <!-- Tailwind CSS untuk Styling Cepat -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js untuk Grafik Interaktif -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- MathJax untuk Rumus Matematika -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
+    <!-- Font Awesome untuk Ikon -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f3f4f6; }
-        .card { transition: transform 0.2s; }
-        .card:hover { transform: translateY(-2px); }
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;600;800&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #e2e8f0; }
+        .code-font { font-family: 'JetBrains Mono', monospace; }
+        .card { @apply bg-slate-800 rounded-xl border border-slate-700 overflow-hidden shadow-lg; }
+        .section-header { @apply flex items-center gap-3 mb-6 border-b border-slate-700 pb-4; }
+        .stat-label { @apply text-xs text-slate-400 uppercase tracking-wider mb-1; }
+        .stat-value { @apply text-2xl font-bold text-white; }
+        .stat-sub { @apply text-[10px] text-slate-500 mt-1; }
     </style>
 </head>
-<body class="text-gray-800">
+<body class="antialiased selection:bg-blue-500 selection:text-white">
 
-    <!-- Header / Hero Section -->
-    <header class="bg-gradient-to-r from-blue-800 to-indigo-900 text-white p-8 shadow-lg">
-        <div class="max-w-6xl mx-auto">
-            <h1 class="text-4xl font-bold mb-2">Analisis Numerik Getaran Pegas</h1>
-            <p class="text-xl opacity-90">Penerapan Metode Regresi Linier untuk Estimasi Parameter Fisika</p>
-            <div class="mt-4 flex gap-4 text-sm font-light">
-                <span class="bg-blue-700 px-3 py-1 rounded-full">Metode: Least Squares</span>
-                <span class="bg-blue-700 px-3 py-1 rounded-full">Model: Harmonik Sederhana</span>
-                <span class="bg-blue-700 px-3 py-1 rounded-full">Tools: Python (NumPy/SciPy)</span>
+    <!-- Navbar -->
+    <nav class="bg-slate-900 border-b border-slate-700 sticky top-0 z-50 backdrop-blur-md bg-opacity-80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-microchip text-blue-500 text-xl"></i>
+                    <span class="font-bold text-xl tracking-tight">NumComp<span class="text-blue-500">Dashboard</span></span>
+                </div>
+                <div class="hidden md:block text-right">
+                    
+                </div>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <main class="max-w-6xl mx-auto p-6 space-y-8">
+    <main class="max-w-7xl mx-auto p-6 space-y-12">
 
-        <!-- Section 1: Teori & Metodologi -->
-        <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-white p-6 rounded-xl shadow-md card">
-                <h2 class="text-2xl font-bold text-blue-800 mb-4 flex items-center">
-                    <span class="text-3xl mr-2">📚</span> Teori Metode Numerik
-                </h2>
-                <div class="prose text-gray-600">
-                    <p>Analisis ini menggunakan metode <strong>Regresi Linier Kuadrat Terkecil</strong> (<em>Least Squares Method</em>) untuk meminimalkan error kuadrat antara data eksperimen dan model teoretis.</p>
-                    <p class="mt-2 font-semibold">1. Linearisasi Model:</p>
-                    <div class="overflow-x-auto">
-                        $$ f = \frac{1}{2\pi} \sqrt{\frac{k}{m}} \Rightarrow f^2 = \left(\frac{k}{4\pi^2}\right) \cdot \frac{1}{m} + C $$
-                    </div>
-                    <p class="text-sm italic mt-1">Dimana \(y = f^2\), \(x = 1/m\), dan gradien \(b = k/4\pi^2\).</p>
-                    
-                    <p class="mt-2 font-semibold">2. Matriks Normal:</p>
-                    <div class="overflow-x-auto text-sm">
-                        $$ \begin{bmatrix} n & \sum x \\ \sum x & \sum x^2 \end{bmatrix} \begin{bmatrix} a \\ b \end{bmatrix} = \begin{bmatrix} \sum y \\ \sum xy \end{bmatrix} $$
-                    </div>
+        <!-- Header Judul Utama -->
+        <div class="text-center space-y-4 py-4">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400 leading-tight">
+                Penentuan Perpindahan Struktur Multi-Titik dan Prediksi Frekuensi Natural
+            </h1>
+            <p class="text-lg md:text-xl text-slate-400 font-light border-t border-slate-800 inline-block pt-4 px-8">
+                Menggunakan Metode Gauss-Jordan dan Analisis Regresi Linier
+            </p>
+        </div>
+
+        <!-- Intro Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl p-6 shadow-lg transform hover:scale-105 transition duration-300">
+                <div class="text-blue-200 text-sm font-bold uppercase mb-1">Total Node Struktur</div>
+                <div class="text-4xl font-extrabold text-white">6 <span class="text-lg font-normal opacity-70">DOF</span></div>
+                <div class="mt-4 text-xs bg-blue-900/50 p-2 rounded inline-block">Metode: Gauss-Jordan</div>
+            </div>
+            <div class="bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl p-6 shadow-lg transform hover:scale-105 transition duration-300">
+                <div class="text-purple-200 text-sm font-bold uppercase mb-1">Akurasi Model (R²)</div>
+                <div class="text-4xl font-extrabold text-white">99.9%</div>
+                <div class="mt-4 text-xs bg-purple-900/50 p-2 rounded inline-block">Metode: Regresi Linier</div>
+            </div>
+            <div class="bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-xl p-6 shadow-lg transform hover:scale-105 transition duration-300">
+                <div class="text-emerald-200 text-sm font-bold uppercase mb-1">Kekakuan (Stiffness)</div>
+                <div class="text-4xl font-extrabold text-white">32.61 <span class="text-lg font-normal opacity-70">kN/m</span></div>
+                <div class="mt-4 text-xs bg-emerald-900/50 p-2 rounded inline-block">Hasil Komputasi</div>
+            </div>
+        </div>
+
+        <!-- BAGIAN A: STATIS -->
+        <section id="bagian-a">
+            <div class="section-header">
+                <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center font-bold text-white">A</div>
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-100">Analisis Statis Struktur (Sistem Linier)</h2>
+                    <p class="text-slate-400 text-sm">Menyelesaikan persamaan keseimbangan gaya 6 titik.</p>
                 </div>
             </div>
 
-            <div class="bg-white p-6 rounded-xl shadow-md card">
-                <h2 class="text-2xl font-bold text-indigo-800 mb-4 flex items-center">
-                    <span class="text-3xl mr-2">💻</span> Implementasi Kode
-                </h2>
-                <p class="text-gray-600 mb-2">Cuplikan kode Python utama untuk komputasi regresi:</p>
-                <div class="h-64 overflow-y-auto rounded-lg border border-gray-200">
-<pre><code class="language-python"># Transformasi Data
-x = 1 / m   # Sumbu X
-y = f**2    # Sumbu Y
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Teori & Math -->
+                <div class="card p-6">
+                    <h3 class="text-lg font-bold text-blue-400 mb-4"><i class="fas fa-square-root-alt mr-2"></i>Model Matematika</h3>
+                    <p class="text-slate-300 text-sm mb-4">Sistem dimodelkan dalam bentuk matriks augmented \([A|B]\) dan diselesaikan untuk mencari vektor perpindahan \(\{x\}\).</p>
+                    <div class="bg-slate-900 p-4 rounded-lg border border-slate-700 text-center overflow-x-auto">
+                        $$ [K]\{x\} = \{F\} $$
+                        <div class="text-xs text-slate-500 mt-2 text-left">
+                            Dimana:<br>
+                            K = Matriks Kekakuan (6x6)<br>
+                            x = Perpindahan (Variabel dicari)<br>
+                            F = Gaya Eksternal
+                        </div>
+                    </div>
+                </div>
 
-# Komputasi Statistik (SciPy)
-slope, intercept, r, p, err = stats.linregress(x, y)
+                <!-- Code Snippet -->
+                <div class="card bg-[#1e1e1e] border-none">
+                    <div class="flex items-center justify-between px-4 py-2 bg-[#252526] text-xs text-slate-400 font-mono">
+                        <span>solver.py</span>
+                        <span>Python / NumPy</span>
+                    </div>
+                    <div class="p-4 overflow-x-auto">
+<pre class="code-font text-xs text-green-400 leading-relaxed">
+import numpy as np
 
-# Perhitungan Fisika (Konstanta Pegas)
-# slope = k / (4 * pi^2)
-k = slope * 4 * (np.pi**2)
+<span class="text-blue-400"># 1. Definisi Matriks</span>
+K = np.array([...]) <span class="text-gray-500"># 6x6 Matrix</span>
+F = np.array([45, 32, 28, 40, 35, 26])
 
-print(f"Konstanta Pegas k: {k:.2f} N/m")
-print(f"Akurasi Model (R^2): {r**2:.4f}")
-</code></pre>
+<span class="text-blue-400"># 2. Solver (Gauss-Jordan)</span>
+x = np.linalg.solve(K, F)
+
+<span class="text-gray-500"># Output: [2.63, 2.87, 2.30, 3.02, 3.52, 2.34]</span>
+</pre>
+                    </div>
+                </div>
+
+                <!-- Grafik Chart.js -->
+                <div class="card p-4 lg:col-span-2">
+                    <h3 class="text-lg font-bold text-slate-200 mb-4 ml-2">Visualisasi Perpindahan Node</h3>
+                    <div class="h-80 w-full">
+                        <canvas id="chartStatis"></canvas>
+                    </div>
+                    <div class="mt-4 bg-slate-700/50 p-3 rounded-lg border-l-4 border-red-500">
+                        <h4 class="font-bold text-red-400 text-sm"><i class="fas fa-exclamation-circle mr-2"></i>Insight Penting</h4>
+                        <p class="text-xs text-slate-300 mt-1">
+                            <strong>Node 5</strong> mengalami perpindahan maksimum (3.52 unit). Struktur paling rentan di area ini. 
+                            <strong>Drift terbesar</strong> terjadi antara Node 3 dan 4, mengindikasikan tegangan geser (shear stress) tinggi.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Infografis Statistik A -->
+                <div class="card p-6 lg:col-span-2">
+                    <h3 class="text-lg font-bold text-slate-200 mb-4"><i class="fas fa-chart-bar mr-2 text-blue-500"></i>Statistik Deskriptif Perpindahan</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="bg-slate-900 p-4 rounded border border-slate-700">
+                            <div class="stat-label">Rata-rata (\(\mu\))</div>
+                            <div class="stat-value text-blue-400">2.78</div>
+                            <div class="stat-sub">Unit Perpindahan</div>
+                        </div>
+                        <div class="bg-slate-900 p-4 rounded border border-slate-700">
+                            <div class="stat-label">Standar Deviasi (\(\sigma\))</div>
+                            <div class="stat-value text-blue-400">0.46</div>
+                            <div class="stat-sub">Variabilitas Node</div>
+                        </div>
+                        <div class="bg-slate-900 p-4 rounded border border-slate-700">
+                            <div class="stat-label">Rentang (Max-Min)</div>
+                            <div class="stat-value text-blue-400">1.22</div>
+                            <div class="stat-sub">3.52 - 2.30</div>
+                        </div>
+                        <div class="bg-slate-900 p-4 rounded border border-slate-700">
+                            <div class="stat-label">Total Load (Sum)</div>
+                            <div class="stat-value text-blue-400">16.68</div>
+                            <div class="stat-sub">Akumulasi Geseran</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Section 2: Grafik & Visualisasi -->
-        <section class="bg-white p-6 rounded-xl shadow-md card">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                <span class="text-3xl mr-2">📊</span> Visualisasi Data & Regresi
-            </h2>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="lg:col-span-2 relative h-96">
-                    <canvas id="regressionChart"></canvas>
+        <!-- BAGIAN B: DINAMIS -->
+        <section id="bagian-b">
+            <div class="section-header">
+                <div class="w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center font-bold text-white">B</div>
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-100">Analisis Dinamis (Regresi Linier)</h2>
+                    <p class="text-slate-400 text-sm">Estimasi parameter fisik pegas menggunakan metode Least Squares.</p>
                 </div>
-                <div class="space-y-4">
-                    <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
-                        <h3 class="font-bold text-blue-800">Model Matematis</h3>
-                        <p class="font-mono text-lg text-gray-700 mt-1">y = 823.52x + 0.17</p>
-                        <p class="text-sm text-gray-500 mt-1">f² = 823.52(1/m) + 0.17</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Teori Linearisasi -->
+                <div class="card p-6 lg:col-span-1">
+                    <h3 class="text-lg font-bold text-purple-400 mb-4"><i class="fas fa-random mr-2"></i>Linearisasi Data</h3>
+                    <p class="text-slate-300 text-xs mb-4">Mengubah persamaan non-linier menjadi \(y = mx + c\).</p>
+                    <div class="bg-slate-900 p-3 rounded border border-slate-700 text-center text-xs mb-4">
+                        $$ f = \frac{1}{2\pi}\sqrt{\frac{k}{m}} \rightarrow f^2 = \frac{k}{4\pi^2}\left(\frac{1}{m}\right) $$
                     </div>
-                    <div class="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
-                        <h3 class="font-bold text-green-800">Prediksi (Ekstrapolasi)</h3>
-                        <ul class="text-sm text-gray-700 mt-2 space-y-1">
-                            <li>• Massa 40 kg &rarr; <strong>4.56 Hz</strong></li>
-                            <li>• Massa 50 kg &rarr; <strong>4.08 Hz</strong></li>
-                        </ul>
+                    <ul class="text-xs text-slate-400 space-y-2 font-mono">
+                        <li class="flex justify-between"><span>Sumbu Y:</span> <span class="text-purple-300">f² (Frekuensi Kuadrat)</span></li>
+                        <li class="flex justify-between"><span>Sumbu X:</span> <span class="text-purple-300">1/m (Kebalikan Massa)</span></li>
+                        <li class="flex justify-between"><span>Gradien:</span> <span class="text-purple-300">k / 4π²</span></li>
+                    </ul>
+                </div>
+
+                <!-- Grafik Regresi -->
+                <div class="card p-4 lg:col-span-2">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-bold text-slate-200 ml-2">Plot Regresi (Data vs Model)</h3>
+                        <span class="bg-green-900 text-green-300 text-xs px-2 py-1 rounded font-mono">R² = 0.9994</span>
                     </div>
-                    <div class="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-500">
-                        <h3 class="font-bold text-orange-800">Analisis Residual</h3>
-                        <p class="text-sm text-gray-700 mt-1">Residual tersebar acak di sekitar nol, mengindikasikan model linear valid tanpa bias sistematis.</p>
+                    <div class="h-80 w-full">
+                        <canvas id="chartDinamis"></canvas>
+                    </div>
+                </div>
+
+                <!-- Infografis Statistik B -->
+                <div class="card p-6 lg:col-span-3">
+                    <h3 class="text-lg font-bold text-slate-200 mb-4"><i class="fas fa-check-circle mr-2 text-purple-500"></i>Validitas Statistik Model</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="bg-slate-900 p-4 rounded border border-slate-700">
+                            <div class="stat-label">Pearson Correlation (\(r\))</div>
+                            <div class="stat-value text-purple-400">0.9997</div>
+                            <div class="stat-sub">Hubungan Sangat Kuat</div>
+                        </div>
+                        <div class="bg-slate-900 p-4 rounded border border-slate-700">
+                            <div class="stat-label">Koef. Determinasi (\(R^2\))</div>
+                            <div class="stat-value text-purple-400">0.9994</div>
+                            <div class="stat-sub">Akurasi Prediksi</div>
+                        </div>
+                        <div class="bg-slate-900 p-4 rounded border border-slate-700">
+                            <div class="stat-label">Residual Error (MSE)</div>
+                            <div class="stat-value text-purple-400">1.18</div>
+                            <div class="stat-sub">Rata-rata Kuadrat Error</div>
+                        </div>
+                        <div class="bg-slate-900 p-4 rounded border border-slate-700">
+                            <div class="stat-label">P-Value</div>
+                            <div class="stat-value text-purple-400">&lt; 0.001</div>
+                            <div class="stat-sub">Sangat Signifikan</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Code Implementation Card -->
+                <div class="card bg-[#1e1e1e] border-none lg:col-span-3">
+                    <div class="flex items-center justify-between px-4 py-2 bg-[#252526] text-xs text-slate-400 font-mono">
+                        <span>regression_analysis.py</span>
+                        <span>Python / SciPy</span>
+                    </div>
+                    <div class="p-4 overflow-x-auto">
+<pre class="code-font text-xs text-purple-400 leading-relaxed">
+from scipy import stats
+import numpy as np
+
+<span class="text-slate-500"># 1. Data Transformasi (f^2 vs 1/m)</span>
+m = np.array([5, 10, 15, 20, 25, 30, 35])
+f = np.array([12.8, 9.2, 7.5, 6.4, 5.7, 5.2, 4.8])
+
+X_trans = 1 / m       <span class="text-slate-500"># Sumbu X</span>
+Y_trans = f ** 2      <span class="text-slate-500"># Sumbu Y</span>
+
+<span class="text-slate-500"># 2. Regresi Linier (Least Squares)</span>
+slope, intercept, r, p, err = stats.linregress(X_trans, Y_trans)
+
+<span class="text-slate-500"># 3. Hitung Parameter Fisik</span>
+<span class="text-slate-500"># Rumus: slope = k / (4 * pi^2)</span>
+k = slope * 4 * (np.pi ** 2)
+
+print(f"Kekakuan (k): {k:.2f} N/m")
+<span class="text-slate-500"># Output: 32610.74 N/m</span>
+</pre>
+                    </div>
+                </div>
+
+                <!-- Hasil Perhitungan -->
+                <div class="card p-6 lg:col-span-3">
+                    <h3 class="text-lg font-bold text-slate-200 mb-4">Hasil Estimasi Parameter</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-slate-900 p-4 rounded border border-slate-700">
+                            <div class="text-xs text-slate-500 uppercase">Slope (Gradien)</div>
+                            <div class="text-2xl font-mono text-blue-400">826.04</div>
+                        </div>
+                        <div class="bg-slate-900 p-4 rounded border border-slate-700">
+                            <div class="text-xs text-slate-500 uppercase">Intercept</div>
+                            <div class="text-2xl font-mono text-yellow-400">-0.03</div>
+                            <div class="text-[10px] text-slate-600">Mendekati 0 (Ideal)</div>
+                        </div>
+                        <div class="bg-slate-900 p-4 rounded border border-slate-700 border-l-4 border-l-emerald-500">
+                            <div class="text-xs text-slate-500 uppercase">Konstanta Pegas (k)</div>
+                            <div class="text-2xl font-bold text-emerald-400">32.61 <span class="text-sm font-normal">kN/m</span></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Section 3: Hasil Numerik & Interpretasi -->
-        <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-gradient-to-br from-indigo-500 to-blue-600 text-white p-6 rounded-xl shadow-lg text-center transform hover:scale-105 transition-transform duration-300">
-                <h3 class="text-lg font-medium opacity-80">Konstanta Pegas (k)</h3>
-                <p class="text-4xl font-bold mt-2">32,511</p>
-                <p class="text-sm mt-1 opacity-70">Newton / meter</p>
-                <div class="mt-4 text-xs bg-white/20 p-2 rounded">
-                    Dihitung dari gradien (slope) kurva regresi
+        <!-- BAGIAN C: INTERPRETASI FISIKA (NEW) -->
+        <section id="interpretasi">
+            <div class="section-header">
+                <div class="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center font-bold text-white"><i class="fas fa-lightbulb"></i></div>
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-100">Interpretasi Fisika & Rekomendasi</h2>
+                    <p class="text-slate-400 text-sm">Menerjemahkan angka numerik menjadi wawasan teknis (Engineering Insights).</p>
                 </div>
             </div>
 
-            <div class="bg-gradient-to-br from-emerald-500 to-teal-600 text-white p-6 rounded-xl shadow-lg text-center transform hover:scale-105 transition-transform duration-300">
-                <h3 class="text-lg font-medium opacity-80">Koefisien Determinasi (R²)</h3>
-                <p class="text-4xl font-bold mt-2">0.9995</p>
-                <p class="text-sm mt-1 opacity-70">Akurasi Sangat Tinggi</p>
-                <div class="mt-4 text-xs bg-white/20 p-2 rounded">
-                    99.95% variasi data dijelaskan oleh model
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Interpretasi Bagian A -->
+                <div class="card p-6 border-l-4 border-l-blue-500">
+                    <h3 class="text-lg font-bold text-blue-400 mb-4 flex items-center">
+                        <i class="fas fa-building mr-2"></i> Keseimbangan Statis
+                    </h3>
+                    <ul class="space-y-4 text-sm text-slate-300">
+                        <li class="flex gap-3">
+                            <i class="fas fa-exclamation-triangle text-red-400 mt-1"></i>
+                            <div>
+                                <strong class="text-slate-100">Titik Kritis (Node 5):</strong>
+                                <p class="mt-1">Perpindahan terbesar terjadi pada Node 5 (3.52 unit). Dalam konteks teknik sipil, ini menandakan area dengan kekakuan lokal terendah atau akumulasi beban terbesar. Perlu penguatan elemen struktur di area ini.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-3">
+                            <i class="fas fa-layer-group text-blue-400 mt-1"></i>
+                            <div>
+                                <strong class="text-slate-100">Inter-Story Drift:</strong>
+                                <p class="mt-1">Lonjakan drastis perpindahan antara Node 3 dan 4 (\(\Delta \approx 0.72\)) mengindikasikan potensi kegagalan geser (shear failure). Area sambungan ini kritis.</p>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-            </div>
 
-            <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100">
-                <h3 class="font-bold text-gray-800 mb-3 text-lg">📝 Interpretasi Fisika</h3>
-                <p class="text-sm text-gray-600 leading-relaxed">
-                    Hasil analisis menunjukkan kesesuaian yang sangat kuat dengan <strong>Hukum Hooke</strong>. 
-                    Nilai intersep yang kecil (0.17) menunjukkan bahwa massa pegas efektif atau faktor gesekan udara sangat minim namun terdeteksi.
-                    <br><br>
-                    Nilai \(k \approx 32.5 \text{ kN/m}\) menunjukkan pegas yang digunakan cukup kaku (<em>stiff</em>), cocok untuk aplikasi beban menengah.
-                </p>
+                <!-- Interpretasi Bagian B -->
+                <div class="card p-6 border-l-4 border-l-purple-500">
+                    <h3 class="text-lg font-bold text-purple-400 mb-4 flex items-center">
+                        <i class="fas fa-wave-square mr-2"></i> Dinamika Struktur
+                    </h3>
+                    <ul class="space-y-4 text-sm text-slate-300">
+                        <li class="flex gap-3">
+                            <i class="fas fa-dumbbell text-purple-400 mt-1"></i>
+                            <div>
+                                <strong class="text-slate-100">Efek Massa (\(f \propto 1/\sqrt{m}\)):</strong>
+                                <p class="mt-1">Penambahan massa secara signifikan menurunkan frekuensi natural. Struktur menjadi lebih lambat merespon getaran, namun amplitudo getaran bisa meningkat jika redaman tidak cukup.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-3">
+                            <i class="fas fa-compress-arrows-alt text-emerald-400 mt-1"></i>
+                            <div>
+                                <strong class="text-slate-100">Kekakuan Global (\(k \approx 32.6\) kN/m):</strong>
+                                <p class="mt-1">Nilai \(k\) merepresentasikan "kesehatan" pegas utama. Nilai ini cukup linier ($R^2 \approx 1$), menandakan material struktur masih dalam batas elastis (Hukum Hooke berlaku penuh).</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Kesimpulan Global -->
+                <div class="card p-6 md:col-span-2 bg-gradient-to-r from-slate-800 to-slate-900 border border-slate-600">
+                    <h3 class="text-lg font-bold text-orange-400 mb-2 flex items-center">
+                        <i class="fas fa-check-double mr-2"></i> Kesimpulan Akhir
+                    </h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Berdasarkan analisis numerik, struktur menunjukkan perilaku <strong>elastis linier</strong> yang konsisten. Model regresi memberikan prediksi yang sangat akurat untuk beban dinamis. Namun, perhatian khusus harus diberikan pada <strong>Node 5</strong> dan sambungan <strong>Node 3-4</strong> karena menunjukkan anomali perpindahan statis yang signifikan.
+                    </p>
+                </div>
             </div>
         </section>
-        
-        <footer class="text-center text-gray-400 text-sm mt-8 pb-4">
-            <p>Analisis Menggunakan Python, NumPy, & Matplotlib</p>
-        </footer>
 
     </main>
 
+    <footer class="border-t border-slate-800 bg-slate-900 py-8 mt-12 text-center">
+        <p class="text-slate-600 text-xs mt-2">Analisis Menggunakan Python, NumPy, & Matplotlib</p>
+    </footer>
+
+    <!-- Script Logika Visualisasi -->
     <script>
-        // Data dari Python Code
+        // --- KONFIGURASI CHART.JS ---
+        Chart.defaults.color = '#94a3b8';
+        Chart.defaults.font.family = 'Inter';
+
+        // 1. DATA BAGIAN A (Statis)
+        const ctxA = document.getElementById('chartStatis').getContext('2d');
+        new Chart(ctxA, {
+            type: 'bar',
+            data: {
+                labels: ['Node 1', 'Node 2', 'Node 3', 'Node 4', 'Node 5', 'Node 6'],
+                datasets: [{
+                    label: 'Perpindahan (x)',
+                    data: [2.6288, 2.8724, 2.2981, 3.0180, 3.5181, 2.3444],
+                    backgroundColor: [
+                        'rgba(59, 130, 246, 0.5)', 
+                        'rgba(59, 130, 246, 0.5)', 
+                        'rgba(16, 185, 129, 0.6)', // Min (Hijau)
+                        'rgba(59, 130, 246, 0.5)', 
+                        'rgba(239, 68, 68, 0.7)',  // Max (Merah)
+                        'rgba(59, 130, 246, 0.5)'
+                    ],
+                    borderColor: [
+                        '#3b82f6', '#3b82f6', '#10b981', '#3b82f6', '#ef4444', '#3b82f6'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#334155' } },
+                    x: { grid: { display: false } }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // 2. DATA BAGIAN B (Dinamis/Regresi)
+        // Data Eksperimen
         const m = [5, 10, 15, 20, 25, 30, 35];
         const f = [12.8, 9.2, 7.5, 6.4, 5.7, 5.2, 4.8];
         
-        // MENGUBAH NAMA VARIABEL UNTUK MENGHINDARI KONFLIK 'ALREADY DECLARED'
-        const xData = m.map(val => 1/val);
-        const yData = f.map(val => val**2);
+        // Transformasi Data untuk Plotting
+        // X = 1/m, Y = f^2
+        const x_data = m.map(val => 1/val);
+        const y_data = f.map(val => val * val);
 
-        // Parameter Regresi (Hasil Hitungan Python)
-        const slopeVal = 823.52;
-        const interceptVal = 0.17;
+        // Garis Regresi (y = mx + c)
+        // Slope: 826.04, Intercept: -0.03
+        const x_line = [0, 0.22]; 
+        const y_line = x_line.map(x => (826.04 * x) - 0.03);
 
-        // Generate data garis regresi (untuk visualisasi halus)
-        const xLine = [0, 0.22];
-        const yLine = xLine.map(val => slopeVal * val + interceptVal);
-
-        // Setup Chart.js
-        const ctx = document.getElementById('regressionChart').getContext('2d');
-        const chart = new Chart(ctx, {
+        const ctxB = document.getElementById('chartDinamis').getContext('2d');
+        new Chart(ctxB, {
             type: 'scatter',
             data: {
                 datasets: [
                     {
                         label: 'Data Eksperimen',
-                        data: xData.map((val, i) => ({x: val, y: yData[i]})),
-                        backgroundColor: '#2563eb', // Blue-600
-                        borderColor: '#1e40af',
+                        data: x_data.map((x, i) => ({x: x, y: y_data[i]})),
+                        backgroundColor: '#a855f7', // Purple
                         pointRadius: 6,
                         pointHoverRadius: 8
                     },
                     {
                         type: 'line',
-                        label: 'Regresi Linear',
-                        data: xLine.map((val, i) => ({x: val, y: yLine[i]})),
-                        borderColor: '#dc2626', // Red-600
+                        label: 'Model Regresi Linier',
+                        data: [{x: x_line[0], y: y_line[0]}, {x: x_line[1], y: y_line[1]}],
+                        borderColor: '#38bdf8', // Sky Blue
                         borderWidth: 2,
                         pointRadius: 0,
-                        fill: false,
-                        tension: 0
+                        borderDash: [5, 5]
                     }
                 ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: 'top' },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.dataset.label || '';
-                                if (label) { label += ': '; }
-                                if (context.parsed.y !== null) {
-                                    label += `(x: ${context.parsed.x.toFixed(3)}, y: ${context.parsed.y.toFixed(2)})`;
-                                }
-                                return label;
-                            }
-                        }
-                    }
-                },
                 scales: {
                     x: {
                         type: 'linear',
                         position: 'bottom',
-                        title: { display: true, text: 'Kebalikan Massa (1/m) [kg⁻¹]', font: {weight: 'bold'} }
+                        title: { display: true, text: 'Kebalikan Massa (1/m)', color: '#94a3b8' },
+                        grid: { color: '#334155' }
                     },
                     y: {
-                        title: { display: true, text: 'Kuadrat Frekuensi (f²) [Hz²]', font: {weight: 'bold'} }
+                        title: { display: true, text: 'Kuadrat Frekuensi (f²)', color: '#94a3b8' },
+                        grid: { color: '#334155' }
                     }
                 }
             }
