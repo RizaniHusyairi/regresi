@@ -24,6 +24,7 @@
         .stat-label { @apply text-xs text-slate-400 uppercase tracking-wider mb-1; }
         .stat-value { @apply text-2xl font-bold text-white; }
         .stat-sub { @apply text-[10px] text-slate-500 mt-1; }
+        .insight-badge { @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium; }
     </style>
 </head>
 <body class="antialiased selection:bg-blue-500 selection:text-white">
@@ -129,10 +130,9 @@ x = np.linalg.solve(K, F)
                         <canvas id="chartStatis"></canvas>
                     </div>
                     <div class="mt-4 bg-slate-700/50 p-3 rounded-lg border-l-4 border-red-500">
-                        <h4 class="font-bold text-red-400 text-sm"><i class="fas fa-exclamation-circle mr-2"></i>Insight Penting</h4>
+                        <h4 class="font-bold text-red-400 text-sm"><i class="fas fa-exclamation-circle mr-2"></i>Insight Data Visual</h4>
                         <p class="text-xs text-slate-300 mt-1">
-                            <strong>Node 5</strong> mengalami perpindahan maksimum (3.52 unit). Struktur paling rentan di area ini. 
-                            <strong>Drift terbesar</strong> terjadi antara Node 3 dan 4, mengindikasikan tegangan geser (shear stress) tinggi.
+                            Grafik batang menunjukkan profil deformasi. Warna <span class="text-red-400 font-bold">merah</span> menandakan defleksi maksimum yang memerlukan perhatian khusus.
                         </p>
                     </div>
                 </div>
@@ -160,6 +160,47 @@ x = np.linalg.solve(K, F)
                             <div class="stat-label">Total Load (Sum)</div>
                             <div class="stat-value text-blue-400">16.68</div>
                             <div class="stat-sub">Akumulasi Geseran</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- NEW: Infografis Interpretasi Fisika Bagian A -->
+                <div class="card p-6 lg:col-span-2 border-t-4 border-t-blue-500">
+                    <h3 class="text-lg font-bold text-slate-100 mb-4 flex items-center">
+                        <i class="fas fa-building mr-2 text-blue-500"></i> Interpretasi Fisika: Keseimbangan Statis
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Insight 1 -->
+                        <div class="flex items-start gap-4">
+                            <div class="bg-red-500/20 p-3 rounded-lg text-red-400">
+                                <i class="fas fa-exclamation-triangle text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-200 text-sm">Titik Kritis (Node 5)</h4>
+                                <div class="mt-1 flex items-center gap-2">
+                                    <span class="insight-badge bg-red-900 text-red-200">Critical Load</span>
+                                    <span class="text-xs text-slate-400">Max Disp: 3.52</span>
+                                </div>
+                                <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+                                    Node 5 mengalami perpindahan terbesar. Ini mengindikasikan area dengan kekakuan lokal terendah atau beban terpusat. <strong class="text-slate-300">Rekomendasi:</strong> Perkuat elemen struktur di sekitar titik ini.
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Insight 2 -->
+                        <div class="flex items-start gap-4">
+                            <div class="bg-amber-500/20 p-3 rounded-lg text-amber-400">
+                                <i class="fas fa-layer-group text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-200 text-sm">Bahaya Geser (Shear)</h4>
+                                <div class="mt-1 flex items-center gap-2">
+                                    <span class="insight-badge bg-amber-900 text-amber-200">High Drift</span>
+                                    <span class="text-xs text-slate-400">\(\Delta_{3-4} \approx 0.72\)</span>
+                                </div>
+                                <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+                                    Lonjakan perpindahan drastis antara Node 3 dan 4 menandakan tegangan geser (inter-story drift) yang tinggi. Area sambungan ini berisiko mengalami kegagalan struktural.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -279,76 +320,58 @@ print(f"Kekakuan (k): {k:.2f} N/m")
                         </div>
                     </div>
                 </div>
+                
+                <!-- NEW: Infografis Interpretasi Fisika Bagian B -->
+                <div class="card p-6 lg:col-span-3 border-t-4 border-t-purple-500">
+                    <h3 class="text-lg font-bold text-slate-100 mb-4 flex items-center">
+                        <i class="fas fa-wave-square mr-2 text-purple-500"></i> Interpretasi Fisika: Dinamika Struktur
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Insight 1 -->
+                        <div class="flex items-start gap-4">
+                            <div class="bg-purple-500/20 p-3 rounded-lg text-purple-400">
+                                <i class="fas fa-weight-hanging text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-200 text-sm">Efek Massa (\(f \propto 1/\sqrt{m}\))</h4>
+                                <div class="mt-1 flex items-center gap-2">
+                                    <span class="insight-badge bg-purple-900 text-purple-200">Inverse Relation</span>
+                                </div>
+                                <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+                                    Massa berbanding terbalik dengan frekuensi natural. Menambahkan massa 10x lipat tidak menurunkan frekuensi 10x lipat, tapi akar kuadratnya. Ini penting untuk <em>tuning</em> agar struktur tidak resonansi dengan mesin.
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Insight 2 -->
+                        <div class="flex items-start gap-4">
+                            <div class="bg-emerald-500/20 p-3 rounded-lg text-emerald-400">
+                                <i class="fas fa-compress-arrows-alt text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-200 text-sm">Validasi Hukum Hooke</h4>
+                                <div class="mt-1 flex items-center gap-2">
+                                    <span class="insight-badge bg-emerald-900 text-emerald-200">Elastic Region</span>
+                                    <span class="text-xs text-slate-400">k ≈ 32.6 kN/m</span>
+                                </div>
+                                <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+                                    Linearitas tinggi (\(R^2 \approx 1\)) mengonfirmasi bahwa material bekerja di daerah elastis. Tidak ada indikasi *plastic deformation* atau kerusakan pegas selama eksperimen.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
             </div>
         </section>
 
-        <!-- BAGIAN C: INTERPRETASI FISIKA (NEW) -->
-        <section id="interpretasi">
-            <div class="section-header">
-                <div class="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center font-bold text-white"><i class="fas fa-lightbulb"></i></div>
-                <div>
-                    <h2 class="text-2xl font-bold text-slate-100">Interpretasi Fisika & Rekomendasi</h2>
-                    <p class="text-slate-400 text-sm">Menerjemahkan angka numerik menjadi wawasan teknis (Engineering Insights).</p>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Interpretasi Bagian A -->
-                <div class="card p-6 border-l-4 border-l-blue-500">
-                    <h3 class="text-lg font-bold text-blue-400 mb-4 flex items-center">
-                        <i class="fas fa-building mr-2"></i> Keseimbangan Statis
-                    </h3>
-                    <ul class="space-y-4 text-sm text-slate-300">
-                        <li class="flex gap-3">
-                            <i class="fas fa-exclamation-triangle text-red-400 mt-1"></i>
-                            <div>
-                                <strong class="text-slate-100">Titik Kritis (Node 5):</strong>
-                                <p class="mt-1">Perpindahan terbesar terjadi pada Node 5 (3.52 unit). Dalam konteks teknik sipil, ini menandakan area dengan kekakuan lokal terendah atau akumulasi beban terbesar. Perlu penguatan elemen struktur di area ini.</p>
-                            </div>
-                        </li>
-                        <li class="flex gap-3">
-                            <i class="fas fa-layer-group text-blue-400 mt-1"></i>
-                            <div>
-                                <strong class="text-slate-100">Inter-Story Drift:</strong>
-                                <p class="mt-1">Lonjakan drastis perpindahan antara Node 3 dan 4 (\(\Delta \approx 0.72\)) mengindikasikan potensi kegagalan geser (shear failure). Area sambungan ini kritis.</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Interpretasi Bagian B -->
-                <div class="card p-6 border-l-4 border-l-purple-500">
-                    <h3 class="text-lg font-bold text-purple-400 mb-4 flex items-center">
-                        <i class="fas fa-wave-square mr-2"></i> Dinamika Struktur
-                    </h3>
-                    <ul class="space-y-4 text-sm text-slate-300">
-                        <li class="flex gap-3">
-                            <i class="fas fa-dumbbell text-purple-400 mt-1"></i>
-                            <div>
-                                <strong class="text-slate-100">Efek Massa (\(f \propto 1/\sqrt{m}\)):</strong>
-                                <p class="mt-1">Penambahan massa secara signifikan menurunkan frekuensi natural. Struktur menjadi lebih lambat merespon getaran, namun amplitudo getaran bisa meningkat jika redaman tidak cukup.</p>
-                            </div>
-                        </li>
-                        <li class="flex gap-3">
-                            <i class="fas fa-compress-arrows-alt text-emerald-400 mt-1"></i>
-                            <div>
-                                <strong class="text-slate-100">Kekakuan Global (\(k \approx 32.6\) kN/m):</strong>
-                                <p class="mt-1">Nilai \(k\) merepresentasikan "kesehatan" pegas utama. Nilai ini cukup linier ($R^2 \approx 1$), menandakan material struktur masih dalam batas elastis (Hukum Hooke berlaku penuh).</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Kesimpulan Global -->
-                <div class="card p-6 md:col-span-2 bg-gradient-to-r from-slate-800 to-slate-900 border border-slate-600">
-                    <h3 class="text-lg font-bold text-orange-400 mb-2 flex items-center">
-                        <i class="fas fa-check-double mr-2"></i> Kesimpulan Akhir
-                    </h3>
-                    <p class="text-slate-300 text-sm leading-relaxed">
-                        Berdasarkan analisis numerik, struktur menunjukkan perilaku <strong>elastis linier</strong> yang konsisten. Model regresi memberikan prediksi yang sangat akurat untuk beban dinamis. Namun, perhatian khusus harus diberikan pada <strong>Node 5</strong> dan sambungan <strong>Node 3-4</strong> karena menunjukkan anomali perpindahan statis yang signifikan.
-                    </p>
-                </div>
-            </div>
+        <!-- KESIMPULAN UMUM -->
+        <section class="card p-6 bg-gradient-to-r from-slate-800 to-slate-900 border border-slate-600">
+            <h3 class="text-lg font-bold text-orange-400 mb-2 flex items-center">
+                <i class="fas fa-clipboard-check mr-2"></i> Kesimpulan Akhir
+            </h3>
+            <p class="text-slate-300 text-sm leading-relaxed">
+                Berdasarkan analisis numerik, struktur menunjukkan perilaku <strong>elastis linier</strong> yang konsisten. Model regresi memberikan prediksi yang sangat akurat untuk beban dinamis. Namun, perhatian khusus harus diberikan pada <strong>Node 5</strong> dan sambungan <strong>Node 3-4</strong> karena menunjukkan anomali perpindahan statis yang signifikan.
+            </p>
         </section>
 
     </main>
