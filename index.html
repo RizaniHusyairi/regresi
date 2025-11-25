@@ -64,7 +64,7 @@
                 </div>
                 <h3 class="text-2xl font-bold text-white mb-2">Eliminasi Gauss-Jordan</h3>
                 <p class="text-sm text-slate-400 leading-relaxed">
-                    Algoritma aljabar linier untuk mengubah matriks augmented menjadi bentuk eselon baris tereduksi (RREF). Metode ini memberikan solusi langsung dan eksak untuk sistem persamaan linier simultan ($Ax=B$).
+                    Algoritma aljabar linier untuk mengubah matriks augmented menjadi bentuk eselon baris tereduksi (RREF). Metode ini memberikan solusi langsung dan eksak untuk sistem persamaan linier simultan (Ax=B).
                 </p>
             </div>
             <div class="bg-gradient-to-br from-slate-700 to-slate-800 rounded-xl p-6 shadow-lg border border-slate-600 transform hover:scale-[1.02] transition duration-300">
@@ -73,7 +73,7 @@
                 </div>
                 <h3 class="text-2xl font-bold text-white mb-2">Regresi Linier (Least Squares)</h3>
                 <p class="text-sm text-slate-400 leading-relaxed">
-                    Pendekatan statistik untuk memodelkan hubungan antara variabel dependen ($f^2$) dan independen ($1/m$) dengan meminimalkan jumlah kuadrat residu (selisih data eksperimen vs model).
+                    Pendekatan statistik untuk memodelkan hubungan antara variabel dependen (f²) dan independen (1/m) dengan meminimalkan jumlah kuadrat residu (selisih data eksperimen vs model).
                 </p>
             </div>
         </div>
@@ -285,6 +285,69 @@ x = np.linalg.solve(K, F)
                         <li class="flex justify-between"><span>Sumbu X:</span> <span class="text-purple-300">1/m (Kebalikan Massa)</span></li>
                         <li class="flex justify-between"><span>Gradien:</span> <span class="text-purple-300">k / 4π²</span></li>
                     </ul>
+                </div>
+
+                <!-- NEW: Tabel Transformasi Data (Jawaban Soal B.1) -->
+                <div class="card p-6 lg:col-span-3">
+                    <h3 class="text-lg font-bold text-slate-200 mb-4 flex items-center">
+                        <i class="fas fa-table mr-2 text-purple-400"></i> Tabel Transformasi Data (Hasil Linearisasi)
+                    </h3>
+                    <div class="overflow-x-auto rounded-lg border border-slate-700">
+                        <table class="w-full text-sm text-left">
+                            <thead class="text-xs text-slate-200 uppercase bg-slate-900/80">
+                                <tr>
+                                    <th>Massa (m) <span class="text-[10px] text-slate-400 normal-case ml-1">[kg]</span></th>
+                                    <th>Frekuensi (f) <span class="text-[10px] text-slate-400 normal-case ml-1">[Hz]</span></th>
+                                    <th class="text-purple-300 bg-purple-900/10 border-l border-slate-700">Transformasi X (1/m) <span class="text-[10px] text-purple-400 normal-case ml-1">[kg⁻¹]</span></th>
+                                    <th class="text-purple-300 bg-purple-900/10">Transformasi Y (f²) <span class="text-[10px] text-purple-400 normal-case ml-1">[Hz²]</span></th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-700 bg-slate-800">
+                                <tr>
+                                    <td>5</td>
+                                    <td>12.8</td>
+                                    <td class="bg-purple-900/5 border-l border-slate-700 font-mono text-purple-200">0.200</td>
+                                    <td class="bg-purple-900/5 font-mono text-purple-200">163.84</td>
+                                </tr>
+                                <tr>
+                                    <td>10</td>
+                                    <td>9.2</td>
+                                    <td class="bg-purple-900/5 border-l border-slate-700 font-mono text-purple-200">0.100</td>
+                                    <td class="bg-purple-900/5 font-mono text-purple-200">84.64</td>
+                                </tr>
+                                <tr>
+                                    <td>15</td>
+                                    <td>7.5</td>
+                                    <td class="bg-purple-900/5 border-l border-slate-700 font-mono text-purple-200">0.067</td>
+                                    <td class="bg-purple-900/5 font-mono text-purple-200">56.25</td>
+                                </tr>
+                                <tr>
+                                    <td>20</td>
+                                    <td>6.4</td>
+                                    <td class="bg-purple-900/5 border-l border-slate-700 font-mono text-purple-200">0.050</td>
+                                    <td class="bg-purple-900/5 font-mono text-purple-200">40.96</td>
+                                </tr>
+                                <tr>
+                                    <td>25</td>
+                                    <td>5.7</td>
+                                    <td class="bg-purple-900/5 border-l border-slate-700 font-mono text-purple-200">0.040</td>
+                                    <td class="bg-purple-900/5 font-mono text-purple-200">32.49</td>
+                                </tr>
+                                <tr>
+                                    <td>30</td>
+                                    <td>5.2</td>
+                                    <td class="bg-purple-900/5 border-l border-slate-700 font-mono text-purple-200">0.033</td>
+                                    <td class="bg-purple-900/5 font-mono text-purple-200">27.04</td>
+                                </tr>
+                                <tr>
+                                    <td>35</td>
+                                    <td>4.8</td>
+                                    <td class="bg-purple-900/5 border-l border-slate-700 font-mono text-purple-200">0.029</td>
+                                    <td class="bg-purple-900/5 font-mono text-purple-200">23.04</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <!-- Grafik Regresi -->
