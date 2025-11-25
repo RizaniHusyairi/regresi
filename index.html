@@ -38,7 +38,7 @@
                     <span class="font-bold text-xl tracking-tight">NumComp<span class="text-blue-500">Dashboard</span></span>
                 </div>
                 <div class="hidden md:block text-right">
-                    
+        
                 </div>
             </div>
         </div>
@@ -56,22 +56,25 @@
             </p>
         </div>
 
-        <!-- Intro Stats -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl p-6 shadow-lg transform hover:scale-105 transition duration-300">
-                <div class="text-blue-200 text-sm font-bold uppercase mb-1">Total Node Struktur</div>
-                <div class="text-4xl font-extrabold text-white">6 <span class="text-lg font-normal opacity-70">DOF</span></div>
-                <div class="mt-4 text-xs bg-blue-900/50 p-2 rounded inline-block">Metode: Gauss-Jordan</div>
+        <!-- Intro Stats (HANYA TEORI METODE) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-gradient-to-br from-slate-700 to-slate-800 rounded-xl p-6 shadow-lg border border-slate-600 transform hover:scale-[1.02] transition duration-300">
+                <div class="text-blue-400 text-sm font-bold uppercase mb-2 flex items-center">
+                    <i class="fas fa-border-all mr-2"></i> Metode Penyelesaian
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-2">Eliminasi Gauss-Jordan</h3>
+                <p class="text-sm text-slate-400 leading-relaxed">
+                    Algoritma aljabar linier untuk mengubah matriks augmented menjadi bentuk eselon baris tereduksi (RREF). Metode ini memberikan solusi langsung dan eksak untuk sistem persamaan linier simultan ($Ax=B$).
+                </p>
             </div>
-            <div class="bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl p-6 shadow-lg transform hover:scale-105 transition duration-300">
-                <div class="text-purple-200 text-sm font-bold uppercase mb-1">Akurasi Model (R²)</div>
-                <div class="text-4xl font-extrabold text-white">99.9%</div>
-                <div class="mt-4 text-xs bg-purple-900/50 p-2 rounded inline-block">Metode: Regresi Linier</div>
-            </div>
-            <div class="bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-xl p-6 shadow-lg transform hover:scale-105 transition duration-300">
-                <div class="text-emerald-200 text-sm font-bold uppercase mb-1">Kekakuan (Stiffness)</div>
-                <div class="text-4xl font-extrabold text-white">32.61 <span class="text-lg font-normal opacity-70">kN/m</span></div>
-                <div class="mt-4 text-xs bg-emerald-900/50 p-2 rounded inline-block">Hasil Komputasi</div>
+            <div class="bg-gradient-to-br from-slate-700 to-slate-800 rounded-xl p-6 shadow-lg border border-slate-600 transform hover:scale-[1.02] transition duration-300">
+                <div class="text-purple-400 text-sm font-bold uppercase mb-2 flex items-center">
+                    <i class="fas fa-chart-line mr-2"></i> Metode Pemodelan
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-2">Regresi Linier (Least Squares)</h3>
+                <p class="text-sm text-slate-400 leading-relaxed">
+                    Pendekatan statistik untuk memodelkan hubungan antara variabel dependen ($f^2$) dan independen ($1/m$) dengan meminimalkan jumlah kuadrat residu (selisih data eksperimen vs model).
+                </p>
             </div>
         </div>
 
@@ -82,6 +85,32 @@
                 <div>
                     <h2 class="text-2xl font-bold text-slate-100">Analisis Statis Struktur (Sistem Linier)</h2>
                     <p class="text-slate-400 text-sm">Menyelesaikan persamaan keseimbangan gaya 6 titik.</p>
+                </div>
+            </div>
+
+            <!-- HASIL NUMERIK BAGIAN A -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <!-- Stat Total Node -->
+                <div class="bg-blue-900/20 border border-blue-500/30 p-4 rounded-lg flex items-center justify-between">
+                    <div>
+                        <div class="text-xs text-blue-300 uppercase font-bold">Total Node Struktur</div>
+                        <div class="text-2xl font-extrabold text-white">6 <span class="text-sm font-normal opacity-70">DOF</span></div>
+                        <div class="text-[10px] text-blue-400 mt-1">Sistem Persamaan 6x6</div>
+                    </div>
+                    <div class="bg-blue-500/20 p-3 rounded-full">
+                        <i class="fas fa-cubes text-2xl text-blue-400"></i>
+                    </div>
+                </div>
+                <!-- Stat Max Disp -->
+                <div class="bg-blue-900/20 border border-blue-500/30 p-4 rounded-lg flex items-center justify-between">
+                    <div>
+                        <div class="text-xs text-blue-300 uppercase font-bold">Perpindahan Maksimum</div>
+                        <div class="text-2xl font-extrabold text-white">3.52 <span class="text-sm font-normal opacity-70">Unit</span></div>
+                        <div class="text-[10px] text-red-400 mt-1">Terdeteksi pada Node 5</div>
+                    </div>
+                    <div class="bg-red-500/20 p-3 rounded-full">
+                        <i class="fas fa-expand-arrows-alt text-2xl text-red-400"></i>
+                    </div>
                 </div>
             </div>
 
@@ -214,6 +243,32 @@ x = np.linalg.solve(K, F)
                 <div>
                     <h2 class="text-2xl font-bold text-slate-100">Analisis Dinamis (Regresi Linier)</h2>
                     <p class="text-slate-400 text-sm">Estimasi parameter fisik pegas menggunakan metode Least Squares.</p>
+                </div>
+            </div>
+
+            <!-- HASIL NUMERIK BAGIAN B -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <!-- Stat Akurasi -->
+                <div class="bg-purple-900/20 border border-purple-500/30 p-4 rounded-lg flex items-center justify-between">
+                    <div>
+                        <div class="text-xs text-purple-300 uppercase font-bold">Akurasi Model (R²)</div>
+                        <div class="text-2xl font-extrabold text-white">99.9%</div>
+                        <div class="text-[10px] text-purple-400 mt-1">Sangat Presisi</div>
+                    </div>
+                    <div class="bg-purple-500/20 p-3 rounded-full">
+                        <i class="fas fa-bullseye text-2xl text-purple-400"></i>
+                    </div>
+                </div>
+                <!-- Stat Kekakuan -->
+                <div class="bg-emerald-900/20 border border-emerald-500/30 p-4 rounded-lg flex items-center justify-between">
+                    <div>
+                        <div class="text-xs text-emerald-300 uppercase font-bold">Kekakuan (Stiffness)</div>
+                        <div class="text-2xl font-extrabold text-white">32.61 <span class="text-sm font-normal opacity-70">kN/m</span></div>
+                        <div class="text-[10px] text-emerald-400 mt-1">Hasil Komputasi</div>
+                    </div>
+                    <div class="bg-emerald-500/20 p-3 rounded-full">
+                        <i class="fas fa-spring text-2xl text-emerald-400"></i>
+                    </div>
                 </div>
             </div>
 
@@ -391,7 +446,7 @@ print(f"Kekakuan (k): {k:.2f} N/m")
         new Chart(ctxA, {
             type: 'bar',
             data: {
-                labels: ['Node 1', 'Node 2', 'Node 3', 'Node 4', 'Node 5', 'Node 6'],
+                labels: ['x1', 'x2', 'x3', 'x4', 'x5', 'x6'],
                 datasets: [{
                     label: 'Perpindahan (x)',
                     data: [2.6288, 2.8724, 2.2981, 3.0180, 3.5181, 2.3444],
